@@ -1,9 +1,10 @@
 import React from 'react'
 import './CatalogCount.scss';
-import { useFetch } from './CatalogCountHook'
+import { Get } from './CatalogCountHook'
+import CatalogCountForm from './CatalogCountForm'
 
 function CatalogCount() {
-  const [ data, loading ] = useFetch("http://localhost:8000/cc-service/api/v1/catalog-count")
+  const [ data, loading ] = Get("http://localhost:8888/api/v1/catalog-count")
   const list = data.catalogCountResponseCollection;
     return (
       <div>
@@ -29,6 +30,9 @@ function CatalogCount() {
           </table>
           )
         }
+
+        <center><h3>Favor de capturar otro Catalogo de Cuentas</h3></center>
+        <CatalogCountForm />
       </div>
     );
   }
