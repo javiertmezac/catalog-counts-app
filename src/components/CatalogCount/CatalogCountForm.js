@@ -29,9 +29,14 @@ class CatalogCountForm extends React.Component {
       headers: headers,
       body: JSON.stringify(this.state)
     }).then(res => {
-      //todo: res is not Json
-      console.log("blah response: ", res)
-    });
+        if (!res.ok) {
+          res.json().then(data => {
+            alert('Server Error!\n' + data.message)
+          })
+        }
+    }).catch(function(error) {
+      console.log(error)
+    })
 
     event.preventDefault();
   }

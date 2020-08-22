@@ -1,7 +1,6 @@
 import React from 'react'
 import './CatalogCount.scss';
 import { Get } from './CatalogCountHook'
-import CatalogCountForm from './CatalogCountForm'
 
 function CatalogCount() {
   const [ data, loading ] = Get("http://localhost:8888/api/v1/catalog-count")
@@ -30,9 +29,6 @@ function CatalogCount() {
           </table>
           )
         }
-
-        <center><h3>Favor de capturar otro Catalogo de Cuentas</h3></center>
-        <CatalogCountForm />
       </div>
     );
   }
