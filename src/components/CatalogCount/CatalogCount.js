@@ -1,9 +1,9 @@
 import React from 'react'
 import './CatalogCount.scss';
-import { useFetch } from './CatalogCountHook'
+import { Get } from './CatalogCountHook'
 
 function CatalogCount() {
-  const [ data, loading ] = useFetch("http://localhost:8000/cc-service/api/v1/catalog-count")
+  const [ data, loading ] = Get("http://localhost:8888/api/v1/catalog-count")
   const list = data.catalogCountResponseCollection;
     return (
       <div>
