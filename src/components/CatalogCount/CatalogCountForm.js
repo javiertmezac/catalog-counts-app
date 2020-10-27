@@ -45,15 +45,19 @@ class CatalogCountForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
       
-        <label>Amount</label>
-        <input type="text" name="amount" onChange={this.handleChange} />
-        
-        <label>Details</label>
-        <input type="textarea" name="details" onChange={this.handleChange} />
-
-        <label>Enum:
-          <input type="text" name="catalogCountEnumId" onChange={this.handleChange} />
-        </label>
+        <div>
+          <label>Cantidad: </label>
+          <input type="text" name="amount" onChange={this.handleChange} />
+        </div>
+        <div> 
+          <label>Detalles: </label>
+          <input type="textarea" name="details" onChange={this.handleChange} />
+        </div>
+        <div>
+          <label>Catalogo: 
+            <input type="text" name="catalogCountEnumId" onChange={this.handleChange} />
+          </label>
+        </div>
 
         <input type="submit" value="Submit" />
     </form>
