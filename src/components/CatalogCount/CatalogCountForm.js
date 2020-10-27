@@ -24,7 +24,7 @@ class CatalogCountForm extends React.Component {
     }
 
     //todo: make this async, and or use useEffect(), benefits?
-    fetch("http://localhost:8888/api/v1/catalog-count", {
+    fetch("http://localhost:8888/cc-service/api/v1/catalog-count", {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(this.state)
