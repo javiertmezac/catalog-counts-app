@@ -2,8 +2,6 @@ import React from 'react';
 import './CatalogCount.scss';
 import { Get } from './CatalogCountHook';
 
-import { useTable } from "react-table";
-
 function CatalogCount() {
   const [ data, loading ] = Get("http://localhost:8888/cc-service/api/v1/catalog-count")
   const list = data.catalogCountResponseCollection;
