@@ -1,12 +1,16 @@
 import React from 'react';
 import './CatalogCount.scss';
 import { Get } from './CatalogCountHook';
+import { CatalogCountForm } from '../CatalogCount';
 
 function CatalogCount() {
   const [ data, loading ] = Get("http://localhost:8888/cc-service/api/v1/catalog-count")
   const list = data.catalogCountResponseCollection;
     return (
       <div>
+        <center><h3>Favor de capturar otro Registro (Catalogo de Cuentas)</h3></center>
+        <CatalogCountForm />
+
         <center><h1>Historial Catalogo de Cuentas</h1></center>
         { loading ? ("Cargando Lista ... ") : (
           <table className="table table-hover">
