@@ -1,6 +1,5 @@
 import React from 'react'
 // import CatalogCount from '.';
-import { Post } from './CatalogCountHook'
 
 class CatalogCountForm extends React.Component {
   constructor() {
@@ -44,25 +43,25 @@ class CatalogCountForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <div class="grid-container">
-          <div class="grid-x grid-padding-x">
+        <div className="grid-container">
+          <div className="grid-x grid-padding-x">
 
-            <div class="medium-6 cell">
+            <div className="medium-6 cell">
               <label>Cantidad: </label>
               <input type="text" name="amount" onChange={this.handleChange} />
             </div>
 
-            <div class="medium-6 cell">
+            <div className="medium-6 cell">
               <label>Catalogo:</label>
               <input type="text" name="catalogCountEnumId" onChange={this.handleChange} />
             </div>
 
-            <div class="medium cell">
+            <div className="medium cell">
               <label>Detalles: </label>
               <textarea placeholder="Descripción" name="details" onChange={this.handleChange} ></textarea>
             </div>
 
-            <button class=".submit button small expanded" href="#">Guardar!</button>
+            <button className=".submit button small expanded" href="#">Guardar!</button>
 
           </div>
         </div>

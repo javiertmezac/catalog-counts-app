@@ -11,7 +11,9 @@ function CatalogCount() {
         <center><h3>Favor de capturar otro Registro (Catalogo de Cuentas)</h3></center>
         <CatalogCountForm />
 
-        <center><h1>Historial Catalogo de Cuentas</h1></center>
+        <center>
+          <h1>Historial Catalogo de Cuentas</h1>
+        </center>
         { loading ? ("Cargando Lista ... ") : (
           <table className="table table-hover">
             <thead className="thead-dark">
