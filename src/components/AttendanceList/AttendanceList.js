@@ -12,9 +12,57 @@ class AttendanceList extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8888/cc-service/api/v1/attendance")
-      .then(response => response.json())
-      .then(data => this.setState({members : data.personas}));
+    //1st iteration
+    // validate date is Sunday
+    // validate there is a "service" created
+    // if not : get persona
+    // else: get attendance by Id
+
+    //Note: Sunday is 0, Monday is 1, and so on.
+    var sunday = 1;
+    var day = this.state.currentDate.getDay();
+
+    // var attendance = { attendanceId: '', attended: false, persona : {}}
+    if (day === sunday) {
+      var tempMembers = [];
+
+      fetch("http://localhost:8888/cc-service/api/v1/persona")
+        .then(response => response.json())
+        .then(data => {
+
+          data.personas.forEach(element => {
+            var attendance = { attendanceId: element.id, attended: false, persona: element }
+            tempMembers.push(attendance);
+          });
+
+          this.setState({ members: tempMembers });
+        });
+
+          // this.setState({ members: data.personas }));
+    } 
+    // else {
+    //   //load from attendance
+
+    //   // var tempMembers = [];
+    //   fetch("http://localhost:8888/cc-service/api/v1/service/1/attendance")
+    //   .then(response => response.json())
+    //   .then(data => {
+
+    //     console.log("DATA: "  + data)
+
+    //     data.attendanceList.forEach(element => {
+
+    //       var persona = { id: '', completeName: '', attended: false }
+    //       persona.id = element.persona.id;
+    //       persona.completeName = element.persona.completeName;
+    //       persona.attended = element.attended;
+
+    //       tempMembers.push(persona);
+    //     });
+
+    //     this.setState( { members : tempMembers });
+    //   })
+    // }
   }
 
   render() {
@@ -44,8 +92,8 @@ class AttendanceList extends React.Component {
 
             <tbody>
               {this.state.members.map((value) => (
-                <tr key={value.id}>
-                  <td>{value.completeName} </td>
+                <tr key={value.attendanceId}>
+                  <td>{value.persona.completeName} </td>
                   <td>
                     <input type="checkbox" defaultChecked={value.attended} id="cbox2" value="second_checkbox" /> <label htmlFor="cbox2"></label>
                   </td>
