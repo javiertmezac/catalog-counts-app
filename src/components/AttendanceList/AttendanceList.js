@@ -6,63 +6,86 @@ class AttendanceList extends React.Component {
     super()
 
     this.state = {
+      serviceId: 4,
       currentDate: new Date(),
       members: []
     }
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    //1st iteration
-    // validate date is Sunday
-    // validate there is a "service" created
-    // if not : get persona
-    // else: get attendance by Id
-
     //Note: Sunday is 0, Monday is 1, and so on.
-    var sunday = 1;
+    var sunday = 3;
     var day = this.state.currentDate.getDay();
 
-    // var attendance = { attendanceId: '', attended: false, persona : {}}
     if (day === sunday) {
-      var tempMembers = [];
 
-      fetch("http://localhost:8888/cc-service/api/v1/persona")
-        .then(response => response.json())
-        .then(data => {
+      // validate there is a service created for this sunday
+      var formatDate = this.state.currentDate.toLocaleDateString("en-CA");
+      var getServiceByDateUrl = "http://localhost:8888/cc-service/api/v1/service/" + formatDate
 
-          data.personas.forEach(element => {
-            var attendance = { attendanceId: element.id, attended: false, persona: element }
-            tempMembers.push(attendance);
-          });
-
-          this.setState({ members: tempMembers });
+      fetch(getServiceByDateUrl)
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              this.state.setState({ serviceId: data.id })
+            })
+          } else {
+            console.log("no serviceId found for date: " + formatDate)
+          }
         });
 
-          // this.setState({ members: data.personas }));
-    } 
-    // else {
-    //   //load from attendance
+      var tempMembers = [];
+      if (this.state.serviceId === 0) {
 
-    //   // var tempMembers = [];
-    //   fetch("http://localhost:8888/cc-service/api/v1/service/1/attendance")
-    //   .then(response => response.json())
-    //   .then(data => {
+        fetch("http://localhost:8888/cc-service/api/v1/persona")
+          .then(response => response.json())
+          .then(data => {
 
-    //     console.log("DATA: "  + data)
+            data.personas.forEach(element => {
+              var attendance = { attended: false, persona: element }
+              tempMembers.push(attendance);
+            });
 
-    //     data.attendanceList.forEach(element => {
+            this.setState({ members: tempMembers });
+          });
+      } else {
+        var attendanceURL = "http://localhost:8888/cc-service/api/v1/service/" +
+        this.state.serviceId + "/attendance"
+        console.log(attendanceURL)
+        fetch(attendanceURL)
+          .then(response => response.json())
+          .then(data => {
 
-    //       var persona = { id: '', completeName: '', attended: false }
-    //       persona.id = element.persona.id;
-    //       persona.completeName = element.persona.completeName;
-    //       persona.attended = element.attended;
+            data.attendanceList.forEach(element => {
 
-    //       tempMembers.push(persona);
-    //     });
+              var persona = { id: '', completeName: ''}
+              persona.id = element.persona.id;
+              persona.completeName = element.persona.completeName;
 
-    //     this.setState( { members : tempMembers });
-    //   })
-    // }
+              var attendance = { attended: false, persona: element }
+              attendance.attended = element.attended;
+              attendance.persona = persona;
+
+              tempMembers.push(attendance);
+            });
+
+            this.setState({ members: tempMembers });
+          });
+      }
+    } else {
+      console.log(this.state.currentDate + "is not Sunday")
+    }
+  }
+
+  handleChange(event) {
+
+    var membersIndex = event.target.id - 1;
+    var member = this.state.members[membersIndex]
+
+    console.log(member)
+    this.state.setState({ [members[membersIndex].attended] : event.target.checked })
   }
 
   render() {
@@ -92,10 +115,14 @@ class AttendanceList extends React.Component {
 
             <tbody>
               {this.state.members.map((value) => (
-                <tr key={value.attendanceId}>
+                <tr key={value.persona.id}>
                   <td>{value.persona.completeName} </td>
                   <td>
-                    <input type="checkbox" defaultChecked={value.attended} id="cbox2" value="second_checkbox" /> <label htmlFor="cbox2"></label>
+                    <input 
+                      onChange={this.handleChange}
+                      type="checkbox" 
+                      defaultChecked={value.attended} 
+                      id={value.persona.id} value="second_checkbox" /> <label htmlFor="cbox2"></label>
                   </td>
                 </tr>
               ))}
