@@ -1,45 +1,110 @@
 import React from 'react';
+import { config } from '../../Constans';
 
+const SERVICE_URL = config.url.BASE_API_URL.concat("/service/");
+const PERSONA_URL = config.url.BASE_API_URL.concat("/persona")
 
 class AttendanceList extends React.Component {
   constructor() {
     super()
 
     this.state = {
-      serviceId: 4,
+      isNotSunday: true,
+      fetchingData: true,
+      serviceId: 0,
       currentDate: new Date(),
       members: []
     }
+  }
 
-    this.handleChange = this.handleChange.bind(this);
+  onUpdateItem = (event, i) => {
+
+    const newCheckedValue = event.target.checked;
+
+    this.setState(state => {
+      const members = state.members.map((item, j) => {
+        if (j === i) {
+          item.attended = newCheckedValue;
+          return item;
+        } else {
+          return item;
+        }
+      });
+      return  {
+        members
+      }
+    });
+  }
+
+  onSubmit = () => {
+    var url = SERVICE_URL.concat(this.state.serviceId ).concat("/attendance");
+    var bodyPayload = {
+      "attendanceList" : this.state.members
+    }
+    fetch(url, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json'},
+      body: JSON.stringify(bodyPayload)
+    }).then( response =>  {
+      console.log(response)
+      // alert("Cambios Guardados!")
+      //todo: consider having a "green status bar (notificatin)" that fades after 2s?
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  onSubmitService = () => {
+    var servicePayload = {
+      date : this.state.currentDate
+    }
+
+    fetch(SERVICE_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(servicePayload)
+    }).then(res => {
+      if (res.ok) {
+        console.log(res);
+        // window.location.reload();
+      } else {
+        console.log(res);
+      }
+    })
   }
 
   componentDidMount() {
     //Note: Sunday is 0, Monday is 1, and so on.
-    var sunday = 3;
+    var sunday = 2;
     var day = this.state.currentDate.getDay();
 
     if (day === sunday) {
 
+      this.setState({isNotSunday: false})
+
       // validate there is a service created for this sunday
       var formatDate = this.state.currentDate.toLocaleDateString("en-CA");
-      var getServiceByDateUrl = "http://localhost:8888/cc-service/api/v1/service/" + formatDate
+      var getServiceByDateUrl = SERVICE_URL.concat(formatDate);
 
       fetch(getServiceByDateUrl)
         .then(response => {
           if (response.ok) {
             response.json().then(data => {
-              this.state.setState({ serviceId: data.id })
+              this.setState({ serviceId: data.id })
             })
           } else {
-            console.log("no serviceId found for date: " + formatDate)
+            var message = "No serviceId found for date: "
+                          .concat(formatDate).concat("\n")
+            console.log(message)
+
+ 
           }
         });
 
       var tempMembers = [];
       if (this.state.serviceId === 0) {
 
-        fetch("http://localhost:8888/cc-service/api/v1/persona")
+        fetch(PERSONA_URL)
           .then(response => response.json())
           .then(data => {
 
@@ -51,9 +116,8 @@ class AttendanceList extends React.Component {
             this.setState({ members: tempMembers });
           });
       } else {
-        var attendanceURL = "http://localhost:8888/cc-service/api/v1/service/" +
-        this.state.serviceId + "/attendance"
-        console.log(attendanceURL)
+        var attendanceURL = SERVICE_URL.concat(this.state.serviceId).concat("/attendance");
+
         fetch(attendanceURL)
           .then(response => response.json())
           .then(data => {
@@ -74,65 +138,90 @@ class AttendanceList extends React.Component {
             this.setState({ members: tempMembers });
           });
       }
+       this.setState({fetchingData : false})
     } else {
       console.log(this.state.currentDate + "is not Sunday")
     }
   }
 
-  handleChange(event) {
-
-    var membersIndex = event.target.id - 1;
-    var member = this.state.members[membersIndex]
-
-    console.log(member)
-    this.state.setState({ [members[membersIndex].attended] : event.target.checked })
-  }
-
   render() {
+    const notSunday = this.state.isNotSunday;
+    const loading = this.state.fetchingData;
+    const missingService = this.state.serviceId === 0 ? true : false;
+
     return (
       <div className="grid-container">
-        <center>
-          <h1>Lista de Asistencia!</h1>
+        { notSunday ? 
+        (
+          <center><div> Esperar al Domingo para Generar lista de Asistencia!</div></center>
+        ) :
+          <div>
+            {missingService ? (
+              <div>
+                <button
+                  onClick={() => this.onSubmitService()}
+                  className="button small expanded"
+                  href="#">Crear nuevo Servicio!</button>
+              </div>
+            ) : <div>
+                <center>
+                  <h1>Lista de Asistencia!</h1>
+                  <h3>
+                    {new Intl.DateTimeFormat("es", {
+                      year: "numeric",
+                      month: "short",
+                      day: "2-digit"
+                    }).format(this.state.currentDate)}
+                  </h3>
+                </center>
+              {loading ?
+                (
+                  <center>
+                    <h4>Cargando lista Personas</h4>
+                  </center>
+                ) :
+                (
+                  <div>
+                    <div className="medium-6 cell">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Asistencia</th>
+                          </tr>
+                        </thead>
 
-          <h3>
-            {new Intl.DateTimeFormat("es", {
-              year: "numeric",
-              month: "short",
-              day: "2-digit"
-            }).format(this.state.currentDate)}
-          </h3>
+                        <tbody>
+                          {
+                            this.state.members.map((value, index) => (
+                              <tr key={value.persona.id}>
+                                <td>{value.persona.completeName} </td>
+                                <td>
+                                  <input
+                                    onChange={(event) => this.onUpdateItem(event, index)}
+                                    type="checkbox"
+                                    defaultChecked={value.attended}
+                                    id={value.persona.id}
+                                    value="second_checkbox" /> <label htmlFor="cbox2"></label>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
 
-        </center>
-
-        <div className="medium-6 cell">
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Asistencia</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {this.state.members.map((value) => (
-                <tr key={value.persona.id}>
-                  <td>{value.persona.completeName} </td>
-                  <td>
-                    <input 
-                      onChange={this.handleChange}
-                      type="checkbox" 
-                      defaultChecked={value.attended} 
-                      id={value.persona.id} value="second_checkbox" /> <label htmlFor="cbox2"></label>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-
-          </table>
-        </div>
-        <div>
-          <button className="button small expanded" href="#">Guardar Asistencia!</button>
-        </div>
+                      </table>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => this.onSubmit()}
+                        className="button small expanded"
+                        href="#">Guardar Asistencia!</button>
+                    </div>
+                  </div>
+                )
+              }
+            </div>}
+          </div>
+        }
       </div>
     )
   }

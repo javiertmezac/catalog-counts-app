@@ -14,7 +14,7 @@ function CatalogCount() {
         <center>
           <h1>Historial Catalogo de Cuentas</h1>
         </center>
-        { loading ? ("Cargando Lista ... ") : (
+        { loading ? ( <center><h4> Cargando Lista ...  </h4></center> ) : (
           <table className="table table-hover">
             <thead className="thead-dark">
               <tr>
