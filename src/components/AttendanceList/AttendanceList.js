@@ -48,7 +48,7 @@ class AttendanceList extends React.Component {
     }).then( response =>  {
       console.log(response)
       // alert("Cambios Guardados!")
-      //todo: consider having a "green status bar (notificatin)" that fades after 2s?
+      //todo: consider having a "green status bar (notification)" that fades after 2s?
     }).catch(error => {
       console.log(error)
     })
@@ -66,7 +66,7 @@ class AttendanceList extends React.Component {
     }).then(res => {
       if (res.ok) {
         console.log(res);
-        // window.location.reload();
+        window.location.reload();
       } else {
         console.log(res);
       }
@@ -75,12 +75,12 @@ class AttendanceList extends React.Component {
 
   componentDidMount() {
     //Note: Sunday is 0, Monday is 1, and so on.
-    var sunday = 2;
+    var sunday = 4;
     var day = this.state.currentDate.getDay();
 
     if (day === sunday) {
 
-      this.setState({isNotSunday: false})
+      this.setState({ isNotSunday: false })
 
       // validate there is a service created for this sunday
       var formatDate = this.state.currentDate.toLocaleDateString("en-CA");
@@ -90,58 +90,60 @@ class AttendanceList extends React.Component {
         .then(response => {
           if (response.ok) {
             response.json().then(data => {
+              console.log("serviceid: " + data.id)
               this.setState({ serviceId: data.id })
+              this.getAttendanceList();
             })
           } else {
             var message = "No serviceId found for date: "
-                          .concat(formatDate).concat("\n")
+              .concat(formatDate).concat("\n")
             console.log(message)
-
- 
           }
         });
-
-      var tempMembers = [];
-      if (this.state.serviceId === 0) {
-
-        fetch(PERSONA_URL)
-          .then(response => response.json())
-          .then(data => {
-
-            data.personas.forEach(element => {
-              var attendance = { attended: false, persona: element }
-              tempMembers.push(attendance);
-            });
-
-            this.setState({ members: tempMembers });
-          });
-      } else {
-        var attendanceURL = SERVICE_URL.concat(this.state.serviceId).concat("/attendance");
-
-        fetch(attendanceURL)
-          .then(response => response.json())
-          .then(data => {
-
-            data.attendanceList.forEach(element => {
-
-              var persona = { id: '', completeName: ''}
-              persona.id = element.persona.id;
-              persona.completeName = element.persona.completeName;
-
-              var attendance = { attended: false, persona: element }
-              attendance.attended = element.attended;
-              attendance.persona = persona;
-
-              tempMembers.push(attendance);
-            });
-
-            this.setState({ members: tempMembers });
-          });
-      }
-       this.setState({fetchingData : false})
     } else {
       console.log(this.state.currentDate + "is not Sunday")
     }
+  }
+
+  getAttendanceList() {
+    var tempMembers = [];
+    if (this.state.serviceId === 0) {
+
+      fetch(PERSONA_URL)
+        .then(response => response.json())
+        .then(data => {
+
+          data.personas.forEach(element => {
+            var attendance = { attended: false, persona: element }
+            tempMembers.push(attendance);
+          });
+
+          this.setState({ members: tempMembers });
+        });
+    } else {
+      var attendanceURL = SERVICE_URL.concat(this.state.serviceId).concat("/attendance");
+
+      fetch(attendanceURL)
+        .then(response => response.json())
+        .then(data => {
+
+          data.attendanceList.forEach(element => {
+
+            var persona = { id: '', completeName: '' }
+            persona.id = element.persona.id;
+            persona.completeName = element.persona.completeName;
+
+            var attendance = { attended: false, persona: element }
+            attendance.attended = element.attended;
+            attendance.persona = persona;
+
+            tempMembers.push(attendance);
+          });
+
+          this.setState({ members: tempMembers });
+        });
+    }
+    this.setState({ fetchingData: false })
   }
 
   render() {
