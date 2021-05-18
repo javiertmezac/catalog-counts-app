@@ -1,7 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.scss';
-import { CatalogCount, CatalogCountForm } from '../CatalogCount';
+// import './App.scss';
+import { CatalogCount } from '../CatalogCount';
+import { AttendanceList } from '../AttendanceList';
+// import { routes } from '../../routes/common';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 class App extends React.Component {
 
@@ -9,11 +16,33 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
+          <Router>
+            <div>
 
-          <center><h3>Favor de capturar otro Registro (Catalogo de Cuentas)</h3></center>
-          <CatalogCountForm />
+                <ul className="vertical medium-horizontal menu align-center">
+                  <li>
+                    <Link to="/">Catalog Counts</Link>
+                  </li>
+                  <li>
+                    <Link to="/attendance-list">Attendance List</Link>
+                  </li>
+                </ul>
 
-          <CatalogCount />
+              {/* A <Switch> looks through its children <Route>s and
+              renders the first one that matches the current URL. */}
+              <Switch>
+                
+                <Route path="/attendance-list">
+                  <AttendanceList />
+                </Route>
+
+                <Route path="/">
+                  <CatalogCount />
+                </Route>
+
+              </Switch>
+            </div>
+          </Router>
         </header>
       </div>
     );
