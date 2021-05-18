@@ -66,7 +66,12 @@ class AttendanceList extends React.Component {
     }).then(res => {
       if (res.ok) {
         console.log(res);
-        window.location.reload();
+        res.json().then(data => {
+
+          this.setState({serviceId: data.id })
+          this.getAttendanceList();
+
+        });
       } else {
         console.log(res);
       }
@@ -75,7 +80,7 @@ class AttendanceList extends React.Component {
 
   componentDidMount() {
     //Note: Sunday is 0, Monday is 1, and so on.
-    var sunday = 4;
+    var sunday = 0;
     var day = this.state.currentDate.getDay();
 
     if (day === sunday) {
@@ -98,6 +103,7 @@ class AttendanceList extends React.Component {
             var message = "No serviceId found for date: "
               .concat(formatDate).concat("\n")
             console.log(message)
+            // this.setState( { fetchingData : false })
           }
         });
     } else {
@@ -107,42 +113,29 @@ class AttendanceList extends React.Component {
 
   getAttendanceList() {
     var tempMembers = [];
-    if (this.state.serviceId === 0) {
 
-      fetch(PERSONA_URL)
-        .then(response => response.json())
-        .then(data => {
+    var attendanceURL = SERVICE_URL.concat(this.state.serviceId).concat("/attendance");
 
-          data.personas.forEach(element => {
-            var attendance = { attended: false, persona: element }
-            tempMembers.push(attendance);
-          });
+    fetch(attendanceURL)
+      .then(response => response.json())
+      .then(data => {
 
-          this.setState({ members: tempMembers });
+        data.attendanceList.forEach(element => {
+
+          var persona = { id: '', completeName: '' }
+          persona.id = element.persona.id;
+          persona.completeName = element.persona.completeName;
+
+          var attendance = { attended: false, persona: element }
+          attendance.attended = element.attended;
+          attendance.persona = persona;
+
+          tempMembers.push(attendance);
         });
-    } else {
-      var attendanceURL = SERVICE_URL.concat(this.state.serviceId).concat("/attendance");
 
-      fetch(attendanceURL)
-        .then(response => response.json())
-        .then(data => {
+        this.setState({ members: tempMembers });
+      });
 
-          data.attendanceList.forEach(element => {
-
-            var persona = { id: '', completeName: '' }
-            persona.id = element.persona.id;
-            persona.completeName = element.persona.completeName;
-
-            var attendance = { attended: false, persona: element }
-            attendance.attended = element.attended;
-            attendance.persona = persona;
-
-            tempMembers.push(attendance);
-          });
-
-          this.setState({ members: tempMembers });
-        });
-    }
     this.setState({ fetchingData: false })
   }
 
@@ -158,7 +151,7 @@ class AttendanceList extends React.Component {
           <center><div> Esperar al Domingo para Generar lista de Asistencia!</div></center>
         ) :
           <div>
-            {missingService ? (
+            { missingService ? (
               <div>
                 <button
                   onClick={() => this.onSubmitService()}
