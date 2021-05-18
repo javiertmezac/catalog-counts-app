@@ -7,9 +7,13 @@ function Get(url) {
 
   async function fetchUrl() {
     const response = await fetch(url);
-    const json = await response.json();
-    setData(json);
-    setLoading(false);
+    if (response.status === 200) {
+      const json = await response.json();
+      setData(json);
+      setLoading(false);
+    } else {
+      console.log("Something went wrong while fetching data!")
+    }
   }
 
   useEffect(() => {
