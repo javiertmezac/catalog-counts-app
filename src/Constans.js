@@ -1,7 +1,8 @@
 const prod = {
   url: {
     API_URL: "",
-    API_URL_USERS: ""
+    API_URL_USERS: "",
+    BASE_API_URL: "http://localhost:8888/cc-service/api/v1"
   }
 };
 
