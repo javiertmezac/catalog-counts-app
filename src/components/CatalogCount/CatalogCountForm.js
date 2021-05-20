@@ -1,5 +1,8 @@
 import React from 'react'
 // import CatalogCount from '.';
+import { config } from '../../Constans';
+
+const CC_URL = config.url.BASE_API_URL.concat("/catalog-count");
 
 class CatalogCountForm extends React.Component {
   constructor() {
@@ -23,7 +26,7 @@ class CatalogCountForm extends React.Component {
     }
 
     //todo: make this async, and or use useEffect(), benefits?
-    fetch("http://localhost:8888/cc-service/api/v1/catalog-count", {
+    fetch(CC_URL, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(this.state)

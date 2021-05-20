@@ -2,9 +2,12 @@ import React from 'react';
 import './CatalogCount.scss';
 import { Get } from './CatalogCountHook';
 import { CatalogCountForm } from '../CatalogCount';
+import { config } from '../../Constans';
+
+const CC_URL = config.url.BASE_API_URL.concat("/catalog-count");
 
 function CatalogCount() {
-  const [ data, loading ] = Get("http://localhost:8888/cc-service/api/v1/catalog-count")
+  const [ data, loading ] = Get(CC_URL)
   const list = data.catalogCountResponseCollection;
     return (
       <div>
