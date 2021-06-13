@@ -15,7 +15,6 @@ class PersonaForm extends React.Component {
   }
   handleChange(event) {
     this.setState({ [event.target.name] : event.target.value})
-    console.log(this.state)
   }
 
   handleSubmit(event) {
@@ -29,7 +28,6 @@ class PersonaForm extends React.Component {
       headers: headers,
       body: JSON.stringify(this.state)
     }).then(res => {
-      console.log("ANY RES: ", res.status)
       if (!res.ok) {
         res.json().then(data => {
           alert('Something went wrong! \n' + data.message)
