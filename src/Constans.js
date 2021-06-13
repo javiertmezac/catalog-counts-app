@@ -2,7 +2,7 @@ const prod = {
   url: {
     API_URL: "",
     API_URL_USERS: "",
-    BASE_API_URL: "https://catalog-counts-nropm.ondigitalocean.app/cc-service-api/cc-service/api/v1"
+    BASE_API_URL: "http://jtmc-alb-597752336.us-west-1.elb.amazonaws.com/cc-service/api/v1"
   }
 };
 

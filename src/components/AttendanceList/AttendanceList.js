@@ -1,5 +1,6 @@
 import React from 'react';
 import { config } from '../../Constans';
+import PersonaForm from '../AttendanceList/PersonaForm'
 
 const SERVICE_URL = config.url.BASE_API_URL.concat("/service/");
 const PERSONA_URL = config.url.BASE_API_URL.concat("/persona")
@@ -177,6 +178,9 @@ class AttendanceList extends React.Component {
                 ) :
                 (
                   <div>
+
+                    <PersonaForm />
+
                     <div className="medium-6 cell">
                       <table>
                         <thead>
