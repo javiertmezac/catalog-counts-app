@@ -8,7 +8,7 @@ const prod = {
 
 const dev = {
   url: {
-    BASE_API_URL: "http://localhost:8888/cc-service/api/v1"
+    BASE_API_URL: "http://localhost:8080/cc-service/api/v1"
   }
 };
 
