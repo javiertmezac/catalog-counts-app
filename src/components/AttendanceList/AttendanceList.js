@@ -80,7 +80,7 @@ class AttendanceList extends React.Component {
 
   componentDidMount() {
     //Note: Sunday is 0, Monday is 1, and so on.
-    var sunday = 0;
+    var sunday = 3;
     var day = this.state.currentDate.getDay();
 
     if (day === sunday) {

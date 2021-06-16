@@ -22,6 +22,7 @@ function CatalogCount() {
             <thead className="thead-dark">
               <tr>
                 <th width="350">Fecha Registro (yyyy-MM-dd)</th>
+                <th width="450">Número de Cuenta</th>
                 <th width="200">Cantidad</th>
                 <th>Detalles</th>
                 <th width="150">Saldo</th>
@@ -31,6 +32,7 @@ function CatalogCount() {
               { list.map((cc) => (
                 <tr key={cc.id}>
                   <td>{cc.registrationDate}</td>
+                  <td>{cc.catalogCountEnum}</td>
                   <td>{new Intl.NumberFormat().format(cc.amount)}</td>
                   <td>{cc.details}</td>
                   <td>
