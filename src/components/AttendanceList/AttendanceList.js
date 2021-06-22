@@ -81,9 +81,10 @@ class AttendanceList extends React.Component {
   componentDidMount() {
     //Note: Sunday is 0, Monday is 1, and so on.
     var sunday = 0;
+    var thursday = 4;
     var day = this.state.currentDate.getDay();
 
-    if (day === sunday) {
+    if (day === sunday || day === thursday) {
 
       this.setState({ isNotSunday: false })
 
@@ -146,9 +147,9 @@ class AttendanceList extends React.Component {
 
     return (
       <div className="grid-container">
-        { notSunday ? 
+        { notSunday ?
         (
-          <center><div> Esperar al Domingo para Generar lista de Asistencia!</div></center>
+          <center><div> Esperar al dia de servicio para Generar lista de Asistencia!</div></center>
         ) :
           <div>
             { missingService ? (

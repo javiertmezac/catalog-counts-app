@@ -21,7 +21,8 @@ function CatalogCount() {
           <table className="table table-hover">
             <thead className="thead-dark">
               <tr>
-                <th width="350">Fecha Registro</th>
+                <th width="350">Fecha Registro (yyyy-MM-dd)</th>
+                <th width="450">Número de Cuenta</th>
                 <th width="200">Cantidad</th>
                 <th>Detalles</th>
                 <th width="150">Saldo</th>
@@ -30,13 +31,8 @@ function CatalogCount() {
             <tbody>
               { list.map((cc) => (
                 <tr key={cc.id}>
-                  <td>
-                    {new Intl.DateTimeFormat("es", {
-                      year: "numeric",
-                      month: "short",
-                      day: "2-digit"
-                    }).format(cc.registrationDate)}
-                  </td>
+                  <td>{cc.registrationDate}</td>
+                  <td>{cc.catalogCountEnum}</td>
                   <td>{new Intl.NumberFormat().format(cc.amount)}</td>
                   <td>{cc.details}</td>
                   <td>
