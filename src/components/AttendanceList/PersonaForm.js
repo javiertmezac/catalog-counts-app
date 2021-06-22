@@ -13,6 +13,7 @@ class PersonaForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleChange(event) {
     this.setState({ [event.target.name] : event.target.value})
   }
@@ -22,7 +23,6 @@ class PersonaForm extends React.Component {
       'content-type' : 'application/json'
     }
 
-    console.log('FETCH....')
     fetch(CC_URL, {
       method: "POST",
       headers: headers,
@@ -31,10 +31,11 @@ class PersonaForm extends React.Component {
       if (!res.ok) {
         res.json().then(data => {
           alert('Something went wrong! \n' + data.message)
-        })
+        });
       }
+      
       window.location.reload();
-    })
+    });
 
     event.preventDefault();
   }
