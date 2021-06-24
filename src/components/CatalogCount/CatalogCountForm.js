@@ -17,8 +17,16 @@ class CatalogCountForm extends React.Component {
       details: '',
       registrationDate: new Date()
     }
+    this.baseSate = this.state;
+
+    console.log('initial date: ', this.state.registrationDate)
+    console.log('initial UTCdate: ', this.state.registrationDate.getUTCDate())
+    // console.log('initial date: ', this.state.registrationDate)
+    // console.log('initial date: ', this.state.registrationDate)
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   handleChange(event) {
@@ -39,13 +47,25 @@ class CatalogCountForm extends React.Component {
         if (!res.ok) {
           res.json().then(data => {
             alert('Server Error!\n' + data.message)
-          })
+          });
         }
+
+        this.setState(this.baseSate);
+        this.details.value = ""
+        this.amount.value = ""
+        this.catalogCountEnumId.value = ""
+
+        window.location.reload();
+
     }).catch(function(error) {
       console.log(error)
     })
 
     event.preventDefault();
+  }
+
+  onChange(date) {
+    console.log('apcosi: ', date)
   }
 
   render() {
@@ -56,12 +76,12 @@ class CatalogCountForm extends React.Component {
 
             <div className="medium-3 cell">
               <label>Cantidad: </label>
-              <input type="text" name="amount" onChange={this.handleChange} />
+              <input type="text" name="amount" onChange={this.handleChange} ref={(el) => (this.amount = el)}/>
             </div>
 
             <div className="medium-3 cell">
               <label>Número de Cuenta:</label>
-              <input type="text" name="catalogCountEnumId" onChange={this.handleChange} />
+              <input type="text" name="catalogCountEnumId" onChange={this.handleChange} ref={(el) => (this.catalogCountEnumId = el)}/>
             </div>
 
             <div className="medium-3 cell">
@@ -71,13 +91,16 @@ class CatalogCountForm extends React.Component {
                 dateFormat="yyyy-MM-dd"
                 maxDate={new Date()}
                 selected={this.state.registrationDate}
-                onChange={(date) => this.setState({registrationDate : date})}>
+                onChange={this.onChange}>
+                {/* onChange={(date) => this.setState({registrationDate : date})}> */}
               </DatePicker>
             </div>
 
             <div className="medium cell">
               <label>Detalles: </label>
-              <textarea placeholder="Descripción" name="details" onChange={this.handleChange} ></textarea>
+              <textarea 
+                placeholder="Descripción" name="details" onChange={this.handleChange} 
+                ref={(el) => (this.details = el)}></textarea>
             </div>
 
             <button className=".submit button small expanded" href="#">Guardar!</button>
