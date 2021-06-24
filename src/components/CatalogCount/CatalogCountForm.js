@@ -26,7 +26,6 @@ class CatalogCountForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
   }
 
   handleChange(event) {
@@ -64,10 +63,6 @@ class CatalogCountForm extends React.Component {
     event.preventDefault();
   }
 
-  onChange(date) {
-    console.log('apcosi: ', date)
-  }
-
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -91,8 +86,7 @@ class CatalogCountForm extends React.Component {
                 dateFormat="yyyy-MM-dd"
                 maxDate={new Date()}
                 selected={this.state.registrationDate}
-                onChange={this.onChange}>
-                {/* onChange={(date) => this.setState({registrationDate : date})}> */}
+                onChange={(date) => this.setState({registrationDate : date})}>
               </DatePicker>
             </div>
 
