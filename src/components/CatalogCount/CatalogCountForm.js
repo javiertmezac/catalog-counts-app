@@ -19,11 +19,6 @@ class CatalogCountForm extends React.Component {
     }
     this.baseSate = this.state;
 
-    console.log('initial date: ', this.state.registrationDate)
-    console.log('initial UTCdate: ', this.state.registrationDate.getUTCDate())
-    // console.log('initial date: ', this.state.registrationDate)
-    // console.log('initial date: ', this.state.registrationDate)
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
