@@ -1,5 +1,11 @@
 # Catalog Counts APP (UI) Changelog
 
+## 0.1.3
+Release Date: July 12, 2021
+### Details
+- CatalogCountsForm now clears all fileds after submit
+- CatalogCounts list converts from UTC to LocalStringDate
+
 ## 0.1.2
 Release Date: June 22, 2021
 ### Details
