@@ -55,8 +55,10 @@ class AttendanceList extends React.Component {
   }
 
   onSubmitService = () => {
+    //todo: detect localDate
+    var formatDate = this.state.currentDate.toLocaleDateString("en-CA");
     var servicePayload = {
-      date : this.state.currentDate
+      date : formatDate
     }
 
     fetch(SERVICE_URL, {
