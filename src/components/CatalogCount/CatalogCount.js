@@ -9,6 +9,8 @@ const CC_URL = config.url.BASE_API_URL.concat("/catalog-count");
 function CatalogCount() {
   const [ data, loading ] = Get(CC_URL)
   const list = data.catalogCountResponseCollection;
+  const saldoAnterior = data.saldoAnterior;
+
     return (
       <div>
         <center><h3>Favor de capturar otro Registro (Catalogo de Cuentas)</h3></center>
@@ -41,6 +43,15 @@ function CatalogCount() {
               </tr>
               )) }
             </tbody>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Saldo Anterior:</td>
+                <td>{saldoAnterior}</td>
+              </tr>
+            </tfoot>
           </table>
           )
         }

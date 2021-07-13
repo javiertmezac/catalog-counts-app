@@ -2,6 +2,9 @@ import React from 'react'
 import DatePicker, { setDefaultLocale } from "react-datepicker";
 import { config } from '../../Constans';
 import es from 'date-fns/locale/es';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -21,6 +24,8 @@ class CatalogCountForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this._onSelect = this._onSelect.bind(this);
+
   }
 
   handleChange(event) {
@@ -58,7 +63,22 @@ class CatalogCountForm extends React.Component {
     event.preventDefault();
   }
 
+  _onSelect(event) {
+    console.log("onSelect: ", event)
+    console.log("onSelect: ", event.value)
+
+    this.setState({
+      catalogCountEnumId: event.value
+    });
+  }
+
   render() {
+    const options = [
+      { "value" : 1, "label": "one"},
+      { "value" : 2, "label": "dos"},
+      { "value" : 4, "label": "1+3=4"}
+    ];
+
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="grid-container">
@@ -71,7 +91,8 @@ class CatalogCountForm extends React.Component {
 
             <div className="medium-3 cell">
               <label>Número de Cuenta:</label>
-              <input type="text" name="catalogCountEnumId" onChange={this.handleChange} ref={(el) => (this.catalogCountEnumId = el)}/>
+              {/* <input type="text" name="catalogCountEnumId" onChange={this.handleChange} ref={(el) => (this.catalogCountEnumId = el)}/> */}
+              <Dropdown options={options} onChange={this._onSelect} placeholder="--" />
             </div>
 
             <div className="medium-3 cell">
