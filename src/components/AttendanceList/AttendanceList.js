@@ -98,7 +98,6 @@ class AttendanceList extends React.Component {
         .then(response => {
           if (response.ok) {
             response.json().then(data => {
-              console.log("serviceid: " + data.id)
               this.setState({ serviceId: data.id })
               this.getAttendanceList();
             })

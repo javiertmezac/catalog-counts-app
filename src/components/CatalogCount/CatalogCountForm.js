@@ -9,6 +9,8 @@ import 'react-dropdown/style.css';
 import "react-datepicker/dist/react-datepicker.css";
 
 const CC_URL = config.url.BASE_API_URL.concat("/catalog-count");
+const CCE_URL = config.url.BASE_API_URL.concat("/catalog-count-enum");
+
 setDefaultLocale(es)
 
 class CatalogCountForm extends React.Component {
@@ -18,7 +20,8 @@ class CatalogCountForm extends React.Component {
       catalogCountEnumId: 0,
       amount: 0,
       details: '',
-      registrationDate: new Date()
+      registrationDate: new Date(),
+      catalogCountEnum: []
     }
     this.baseSate = this.state;
 
@@ -26,6 +29,15 @@ class CatalogCountForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this._onSelect = this._onSelect.bind(this);
 
+  }
+
+  componentDidMount() {
+    fetch(CCE_URL).then(res => {
+      if (!res.ok) { alert('Error Fetching CatalogCountEnum') }
+      res.json().then(data => {
+        this.setState({ catalogCountEnum: data.catalogCountEnumList })
+      });
+    })
   }
 
   handleChange(event) {
@@ -52,7 +64,6 @@ class CatalogCountForm extends React.Component {
         this.setState(this.baseSate);
         this.details.value = ""
         this.amount.value = ""
-        this.catalogCountEnumId.value = ""
 
         window.location.reload();
 
@@ -64,8 +75,6 @@ class CatalogCountForm extends React.Component {
   }
 
   _onSelect(event) {
-    console.log("onSelect: ", event)
-    console.log("onSelect: ", event.value)
 
     this.setState({
       catalogCountEnumId: event.value
@@ -73,11 +82,7 @@ class CatalogCountForm extends React.Component {
   }
 
   render() {
-    const options = [
-      { "value" : 1, "label": "one"},
-      { "value" : 2, "label": "dos"},
-      { "value" : 4, "label": "1+3=4"}
-    ];
+    const options = this.state.catalogCountEnum;
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -91,7 +96,6 @@ class CatalogCountForm extends React.Component {
 
             <div className="medium-3 cell">
               <label>Número de Cuenta:</label>
-              {/* <input type="text" name="catalogCountEnumId" onChange={this.handleChange} ref={(el) => (this.catalogCountEnumId = el)}/> */}
               <Dropdown options={options} onChange={this._onSelect} placeholder="--" />
             </div>
 
