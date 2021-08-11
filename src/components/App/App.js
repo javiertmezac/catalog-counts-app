@@ -21,7 +21,7 @@ class App extends React.Component {
 
                 <ul className="vertical medium-horizontal menu align-center">
                   <li>
-                    <Link to="/">Catalogo de Cuentas</Link>
+                    <Link to="/">Catálogo de Cuentas</Link>
                   </li>
                   <li>
                     <Link to="/attendance-list">Lista Asistencia</Link>
